@@ -3,6 +3,7 @@ import { nanoid } from 'nanoid';
 import ContactForm from './components/ContactForm/ContactForm';
 import Filter from './components/Filter/Filter';
 import ContactList from './components/ContactList/ContactList';
+import style from './App.module.css';
 
 class App extends React.Component {
   state = {
@@ -31,18 +32,28 @@ class App extends React.Component {
     }));
   };
 
+  handleChange = evt => {
+    this.setState({ [evt.target.name]: evt.target.value });
+  };
+
+  visibleContacts = () => {
+    return this.state.contacts.filter(contact =>
+      contact.name.toLowerCase().includes(this.state.filter.toLowerCase()),
+    );
+  };
+
   render() {
     return (
-      <div>
+      <div className={style.app}>
         <h1>Phonebook</h1>
-
         <ContactForm onAddContact={this.addContact} />
-
         <h2>Contacts</h2>
-        {
-          //<Filter />
-        }
-        {<ContactList contacts={this.state.contacts} onDeleteContact={this.deleteContact} />}
+        <Filter handleChange={this.handleChange} filter={this.state.filter} />
+        <ContactList
+          contacts={this.state.contacts}
+          filter={this.state.filter}
+          onDeleteContact={this.deleteContact}
+        />
       </div>
     );
   }

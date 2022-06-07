@@ -5,17 +5,22 @@ import style from './ContactList.module.css';
 class ContactList extends React.Component {
   state = {
     contacts: [],
+    filter: '',
   };
 
   static propTypes = {
     contacts: PropType.array.isRequired,
+    filter: PropType.string.isRequired,
     onDeleteContact: PropType.func.isRequired,
   };
 
   render() {
+    const filteredContacts = this.props.contacts.filter(contact =>
+      contact.name.toLowerCase().includes(this.props.filter.toLowerCase()),
+    );
     return (
       <ul className={style.contatcsList}>
-        {this.props.contacts.map(contact => (
+        {filteredContacts.map(contact => (
           <li key={contact.id} className={style.contact}>
             <p>
               {contact.name} : {contact.number}
